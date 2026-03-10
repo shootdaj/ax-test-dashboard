@@ -200,23 +200,114 @@ const App = (() => {
   }
 
   /**
-   * Update alert banner.
+   * Build and render gauge charts for CPU and Memory.
+   */
+  async function renderGauges(metrics) {
+    const gaugesGrid = document.getElementById('gauges-grid');
+    if (!gaugesGrid) return;
+
+    const gaugeMetrics = [
+      { name: 'cpu', label: 'CPU Usage' },
+      { name: 'memory', label: 'Memory Usage' },
+    ];
+
+    // Build gauge cards if not already built
+    if (!gaugesGrid.querySelector('.gauge-card')) {
+      gaugesGrid.innerHTML = gaugeMetrics.map(g => `
+        <div class="card gauge-card" data-gauge="${g.name}">
+          <div class="chart-card__header">
+            <div>
+              <div class="chart-card__title">${g.label}</div>
+              <div class="chart-card__subtitle">Current utilization</div>
+            </div>
+          </div>
+          <div class="gauge-card__canvas-wrap">
+            <canvas id="gauge-${g.name}"></canvas>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Render gauges
+    for (const g of gaugeMetrics) {
+      const canvas = document.getElementById(`gauge-${g.name}`);
+      const m = metrics[g.name];
+      if (canvas && m) {
+        Charts.drawGauge(canvas, m.current, m.max, g.name, g.label);
+      }
+    }
+  }
+
+  /**
+   * Fetch and render heat map.
+   */
+  async function renderHeatMap() {
+    try {
+      const data = await fetchJSON('/api/metrics/heatmap/requests_per_sec');
+      const canvas = document.getElementById('chart-heatmap');
+      if (canvas && data.data && data.data.length > 0) {
+        Charts.drawHeatMap(canvas, data.data, 'requests_per_sec');
+      }
+    } catch (e) {
+      console.warn('Heatmap error:', e);
+    }
+  }
+
+  /**
+   * Update alert banner and alerts panel.
    */
   async function updateAlerts() {
     try {
-      const data = await fetchJSON('/api/alerts/active');
+      const [activeData, rulesData] = await Promise.all([
+        fetchJSON('/api/alerts/active'),
+        fetchJSON('/api/alerts'),
+      ]);
+
+      // Update banner
       const banner = document.getElementById('alert-banner');
       const text = document.getElementById('alert-banner-text');
 
-      if (data.alerts && data.alerts.length > 0) {
+      if (activeData.alerts && activeData.alerts.length > 0) {
         banner.classList.add('alert-banner--active');
-        const alerts = data.alerts.map(a =>
+        const alerts = activeData.alerts.map(a =>
           `${a.ruleName}: ${a.metric} is ${a.value} (${a.level})`
         ).join(' | ');
         text.textContent = alerts;
       } else {
         banner.classList.remove('alert-banner--active');
       }
+
+      // Update alerts panel
+      const alertsList = document.getElementById('alerts-list');
+      const alertsCount = document.getElementById('alerts-count');
+      if (!alertsList || !rulesData.rules) return;
+
+      const activeMap = new Map();
+      for (const a of (activeData.alerts || [])) {
+        activeMap.set(a.ruleId, a);
+      }
+
+      alertsCount.textContent = `${activeData.alerts?.length || 0} active`;
+
+      alertsList.innerHTML = rulesData.rules.map(rule => {
+        const active = activeMap.get(rule.id);
+        const status = active ? active.level : 'ok';
+        const levelLabel = active ? active.level : 'OK';
+        const detail = active
+          ? `${active.metric}: ${active.value} (threshold: ${active.threshold})`
+          : `Threshold: ${rule.warnThreshold || '-'} / ${rule.criticalThreshold || '-'}`;
+
+        return `
+          <div class="alert-item">
+            <span class="alert-item__dot alert-item__dot--${status}"></span>
+            <div class="alert-item__info">
+              <div class="alert-item__name">${rule.name}</div>
+              <div class="alert-item__detail">${detail}</div>
+            </div>
+            <span class="alert-item__level alert-item__level--${status}">${levelLabel}</span>
+          </div>
+        `;
+      }).join('');
     } catch (e) {
       console.warn('Alert check error:', e);
     }
@@ -240,10 +331,12 @@ const App = (() => {
         updateMetricValues(liveData.metrics);
       }
 
-      // Render charts and sparklines in parallel
+      // Render all visualizations in parallel
       await Promise.all([
         renderSparklines(),
         renderCharts(),
+        renderGauges(liveData.metrics),
+        renderHeatMap(),
         updateAlerts(),
       ]);
 
@@ -311,6 +404,7 @@ const App = (() => {
       if (!isLoading) {
         renderSparklines();
         renderCharts();
+        renderHeatMap();
       }
     }, 200);
   }

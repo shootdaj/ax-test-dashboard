@@ -10,6 +10,7 @@ const dashboardsStore = require('./data/dashboards');
 const metricsRoutes = require('./routes/metrics');
 const alertsRoutes = require('./routes/alerts');
 const dashboardsRoutes = require('./routes/dashboards');
+const heatmapRoutes = require('./routes/heatmap');
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.get('/health', (req, res) => {
 app.use(metricsRoutes);
 app.use(alertsRoutes);
 app.use(dashboardsRoutes);
+app.use(heatmapRoutes);
 
 // Serve static files from public/
 app.use(express.static(path.join(__dirname, '..', 'public')));

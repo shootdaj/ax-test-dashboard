@@ -48,9 +48,40 @@
       <!-- Populated by JS -->
     </section>
 
+    <!-- Gauges Row -->
+    <section class="gauges-grid" id="gauges-grid">
+      <!-- Populated by JS: gauge charts for CPU and Memory -->
+    </section>
+
     <!-- Charts -->
     <section class="charts-grid" id="charts-grid">
       <!-- Populated by JS -->
+    </section>
+
+    <!-- Bottom Row: Heat Map + Alerts -->
+    <section class="bottom-grid" id="bottom-grid">
+      <div class="card chart-card" id="heatmap-card">
+        <div class="chart-card__header">
+          <div>
+            <div class="chart-card__title">Request Distribution</div>
+            <div class="chart-card__subtitle">Requests by hour (7-day view)</div>
+          </div>
+        </div>
+        <div class="chart-card__canvas-wrap">
+          <canvas id="chart-heatmap"></canvas>
+        </div>
+      </div>
+      <div class="card alerts-panel" id="alerts-panel">
+        <div class="chart-card__header">
+          <div>
+            <div class="chart-card__title">Alert Rules</div>
+            <div class="chart-card__subtitle" id="alerts-count">0 active</div>
+          </div>
+        </div>
+        <div class="alerts-list" id="alerts-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
     </section>
 
     <!-- Footer -->
