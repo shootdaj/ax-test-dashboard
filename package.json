@@ -1,0 +1,32 @@
+{
+  "name": "ax-test-dashboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "node src/app.js",
+    "test": "node --test test/unit/ test/integration/ test/scenarios/",
+    "test:unit": "node --test test/unit/",
+    "test:integration": "node --test test/integration/",
+    "test:scenarios": "node --test test/scenarios/",
+    "lint": "echo 'No linter configured'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shootdaj/ax-test-dashboard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/shootdaj/ax-test-dashboard/issues"
+  },
+  "homepage": "https://github.com/shootdaj/ax-test-dashboard#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
