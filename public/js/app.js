@@ -410,6 +410,71 @@ const App = (() => {
   }
 
   /**
+   * Load and populate dashboard selector.
+   */
+  async function loadDashboardList() {
+    try {
+      const data = await fetchJSON('/api/dashboards');
+      const select = document.getElementById('dashboard-select');
+      if (!select || !data.dashboards) return;
+
+      select.innerHTML = data.dashboards.map(d =>
+        `<option value="${d.id}">${d.name}</option>`
+      ).join('');
+    } catch (e) {
+      console.warn('Dashboard list error:', e);
+    }
+  }
+
+  /**
+   * Switch to a different dashboard.
+   */
+  async function switchDashboard(dashId) {
+    try {
+      const dashboard = await fetchJSON(`/api/dashboards/${dashId}`);
+      if (!dashboard || !dashboard.panels) return;
+
+      // Rebuild chart panels based on dashboard config
+      const grid = document.getElementById('charts-grid');
+      if (!grid) return;
+
+      // Map panel types to chart renderers
+      grid.innerHTML = dashboard.panels.map(panel => `
+        <div class="card chart-card" data-chart="${panel.metric}">
+          <div class="chart-card__header">
+            <div>
+              <div class="chart-card__title">${getMetricLabel(panel.metric)}</div>
+              <div class="chart-card__subtitle">${panel.type} chart</div>
+            </div>
+          </div>
+          <div class="chart-card__canvas-wrap">
+            <canvas id="chart-${panel.metric}"></canvas>
+          </div>
+        </div>
+      `).join('');
+
+      // Re-render charts
+      await renderCharts();
+    } catch (e) {
+      console.warn('Switch dashboard error:', e);
+    }
+  }
+
+  /**
+   * Get a human-readable label for a metric name.
+   */
+  function getMetricLabel(name) {
+    const labels = {
+      cpu: 'CPU Usage',
+      memory: 'Memory Usage',
+      requests_per_sec: 'Requests per Second',
+      error_rate: 'Error Rate',
+      response_time: 'Response Time',
+    };
+    return labels[name] || name;
+  }
+
+  /**
    * Initialize the dashboard.
    */
   function init() {
@@ -420,16 +485,25 @@ const App = (() => {
       btn.addEventListener('click', () => setRange(btn.dataset.range));
     });
 
+    // Bind dashboard selector
+    const dashSelect = document.getElementById('dashboard-select');
+    if (dashSelect) {
+      dashSelect.addEventListener('change', (e) => {
+        switchDashboard(parseInt(e.target.value, 10));
+      });
+    }
+
     // Handle resize
     window.addEventListener('resize', handleResize);
 
     // Initial load
+    loadDashboardList();
     refresh().then(() => {
       startPolling(3000);
     });
   }
 
-  return { init, refresh, setRange, startPolling, stopPolling };
+  return { init, refresh, setRange, startPolling, stopPolling, switchDashboard, loadDashboardList };
 })();
 
 // Boot
