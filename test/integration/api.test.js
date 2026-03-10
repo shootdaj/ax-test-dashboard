@@ -4,6 +4,8 @@ const { describe, it, before, after } = require('node:test');
 const assert = require('node:assert/strict');
 const http = require('node:http');
 const app = require('../../src/app');
+const metricsStore = require('../../src/data/metrics');
+const alertsStore = require('../../src/data/alerts');
 
 // Helper to make HTTP requests to the test server
 function request(server, method, path, body = null) {
@@ -46,6 +48,8 @@ describe('API Integration Tests', () => {
   });
 
   after(() => {
+    metricsStore.stopSimulation();
+    alertsStore.stopEvaluation();
     return new Promise((resolve) => {
       server.close(resolve);
     });

@@ -3,18 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AX Test Dashboard</title>
-  <style>
-    body { background: #0a0a0f; color: #e0e0e0; font-family: system-ui, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-    h1 { font-size: 2rem; color: #00e5ff; }
-    p { color: #888; }
-  </style>
+  <title>AX Dashboard — Real-Time Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect rx='18' width='100' height='100' fill='%23111'/><text x='50' y='68' text-anchor='middle' font-size='52' font-weight='900' fill='url(%23g)'>AX</text><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%2300e5ff'/><stop offset='100%25' stop-color='%23ff00e5'/></linearGradient></defs></svg>">
 </head>
 <body>
-  <div style="text-align: center;">
-    <h1>AX Test Dashboard</h1>
-    <p>API is ready. Frontend coming in Phase 2.</p>
-    <p><a href="/health" style="color: #00e5ff;">Health Check</a> | <a href="/api/metrics" style="color: #00e5ff;">Metrics</a></p>
+  <!-- Header -->
+  <header class="header">
+    <div class="header__brand">
+      <div class="header__logo">AX</div>
+      <span class="header__title">Dashboard</span>
+    </div>
+    <div class="header__controls">
+      <div class="header__status">
+        <span class="metric-card__status metric-card__status--ok"></span>
+        <span id="connection-status">Connecting...</span>
+      </div>
+      <div class="time-range">
+        <button class="time-range__btn time-range__btn--active" data-range="1h">1H</button>
+        <button class="time-range__btn" data-range="6h">6H</button>
+        <button class="time-range__btn" data-range="24h">24H</button>
+        <button class="time-range__btn" data-range="7d">7D</button>
+      </div>
+      <select class="dashboard-select" id="dashboard-select">
+        <option value="1">System Overview</option>
+        <option value="2">Performance</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- Alert Banner -->
+  <div class="alert-banner" id="alert-banner">
+    <span class="alert-banner__dot"></span>
+    <span id="alert-banner-text">No active alerts</span>
   </div>
+
+  <!-- Main Content -->
+  <main class="main">
+    <!-- Metric Cards -->
+    <section class="metrics-grid" id="metrics-grid">
+      <!-- Populated by JS -->
+    </section>
+
+    <!-- Charts -->
+    <section class="charts-grid" id="charts-grid">
+      <!-- Populated by JS -->
+    </section>
+
+    <!-- Footer -->
+    <div class="last-updated" id="last-updated">Loading...</div>
+  </main>
+
+  <script src="/js/charts.js"></script>
+  <script src="/js/app.js"></script>
 </body>
 </html>
