@@ -1,0 +1,131 @@
+# Requirements: AX Test Dashboard
+
+**Defined:** 2026-03-10
+**Core Value:** Users can monitor system health through beautiful, real-time visualizations that update live
+
+## v1 Requirements
+
+### Data Engine
+
+- [ ] **DATA-01**: System generates simulated time-series metrics (CPU, memory, requests/sec, error rate, response time)
+- [ ] **DATA-02**: System supports configurable data retention periods (1h, 6h, 24h, 7d)
+- [ ] **DATA-03**: System computes metric aggregations (min, max, avg, p50, p95, p99 percentiles)
+- [ ] **DATA-04**: System seeds realistic historical data on startup
+- [ ] **DATA-05**: System generates new data points every 5 seconds to simulate live metrics
+
+### API
+
+- [ ] **API-01**: User can fetch current metric values via GET /api/metrics/live
+- [ ] **API-02**: User can fetch historical metric data via GET /api/metrics/:name with time range query params
+- [ ] **API-03**: User can list all available metrics via GET /api/metrics
+- [ ] **API-04**: User can fetch aggregated metric data with percentile breakdowns
+- [ ] **API-05**: System exposes health check at GET /health
+
+### Alerts
+
+- [ ] **ALRT-01**: User can create threshold-based alert rules (warn/critical levels)
+- [ ] **ALRT-02**: System evaluates alert rules against incoming metrics and triggers alerts
+- [ ] **ALRT-03**: System records alert history with triggered/resolved timestamps
+- [ ] **ALRT-04**: User can view alert history via GET /api/alerts/history
+- [ ] **ALRT-05**: User can list and manage alert rules via GET/POST /api/alerts
+
+### Dashboards
+
+- [ ] **DASH-01**: User can create named dashboard configurations
+- [ ] **DASH-02**: User can save custom dashboard layouts (which metrics, chart types, positions)
+- [ ] **DASH-03**: User can load saved dashboard configurations
+- [ ] **DASH-04**: System supports multiple dashboards (multi-tenant)
+
+### Frontend - Theme
+
+- [ ] **UI-01**: Dashboard uses dark theme with neon accent colors (cyan, magenta, green on dark gray/black)
+- [ ] **UI-02**: Metric cards use glassmorphism effect (blur, transparency, subtle glow)
+- [ ] **UI-03**: Typography uses monospace for numbers and clean sans-serif for labels
+- [ ] **UI-04**: All interactive elements have smooth hover transitions
+
+### Frontend - Charts
+
+- [ ] **CHART-01**: Real-time line charts render with smooth animation (canvas-based, 60fps feel)
+- [ ] **CHART-02**: Sparkline mini-charts appear in metric summary cards
+- [ ] **CHART-03**: Gauge/donut charts display CPU and memory utilization
+- [ ] **CHART-04**: Heat map visualizes request distribution by hour
+
+### Frontend - Layout
+
+- [ ] **LAYOUT-01**: Dashboard uses responsive CSS Grid that rearranges on mobile
+- [ ] **LAYOUT-02**: Alert banner pulses visually when alerts are firing
+- [ ] **LAYOUT-03**: Status indicators show animated pulse dots (green/yellow/red)
+- [ ] **LAYOUT-04**: Loading skeleton animations display during data fetch
+
+### Frontend - Interactivity
+
+- [ ] **INTX-01**: User can select time range for displayed data (1h, 6h, 24h, 7d)
+- [ ] **INTX-02**: Dashboard auto-refreshes with polling (every 2-3 seconds)
+- [ ] **INTX-03**: User can switch between saved dashboards
+
+## v2 Requirements
+
+### Advanced Features
+
+- **ADV-01**: User can create custom metric formulas
+- **ADV-02**: User can export dashboard as image/PDF
+- **ADV-03**: User can set up notification channels (email, Slack)
+- **ADV-04**: User can create multi-panel dashboard with drag-and-drop
+
+## Out of Scope
+
+| Feature | Reason |
+|---------|--------|
+| User authentication | Demo dashboard, single-user |
+| Persistent database | In-memory storage keeps deployment simple |
+| Real infrastructure monitoring | Simulated data avoids infrastructure deps |
+| WebSocket connections | Vercel serverless doesn't support persistent connections |
+| Mobile native app | Responsive web is sufficient |
+
+## Traceability
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| DATA-01 | Phase 1 | Pending |
+| DATA-02 | Phase 1 | Pending |
+| DATA-03 | Phase 1 | Pending |
+| DATA-04 | Phase 1 | Pending |
+| DATA-05 | Phase 1 | Pending |
+| API-01 | Phase 1 | Pending |
+| API-02 | Phase 1 | Pending |
+| API-03 | Phase 1 | Pending |
+| API-04 | Phase 1 | Pending |
+| API-05 | Phase 1 | Pending |
+| UI-01 | Phase 2 | Pending |
+| UI-02 | Phase 2 | Pending |
+| UI-03 | Phase 2 | Pending |
+| UI-04 | Phase 2 | Pending |
+| CHART-01 | Phase 2 | Pending |
+| CHART-02 | Phase 2 | Pending |
+| LAYOUT-01 | Phase 2 | Pending |
+| LAYOUT-04 | Phase 2 | Pending |
+| INTX-01 | Phase 2 | Pending |
+| INTX-02 | Phase 2 | Pending |
+| CHART-03 | Phase 3 | Pending |
+| CHART-04 | Phase 3 | Pending |
+| ALRT-01 | Phase 3 | Pending |
+| ALRT-02 | Phase 3 | Pending |
+| ALRT-03 | Phase 3 | Pending |
+| ALRT-04 | Phase 3 | Pending |
+| ALRT-05 | Phase 3 | Pending |
+| LAYOUT-02 | Phase 3 | Pending |
+| LAYOUT-03 | Phase 3 | Pending |
+| DASH-01 | Phase 4 | Pending |
+| DASH-02 | Phase 4 | Pending |
+| DASH-03 | Phase 4 | Pending |
+| DASH-04 | Phase 4 | Pending |
+| INTX-03 | Phase 4 | Pending |
+
+**Coverage:**
+- v1 requirements: 34 total
+- Mapped to phases: 34
+- Unmapped: 0
+
+---
+*Requirements defined: 2026-03-10*
+*Last updated: 2026-03-10 after initial definition*
