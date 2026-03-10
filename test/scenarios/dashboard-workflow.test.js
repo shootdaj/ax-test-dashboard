@@ -4,6 +4,8 @@ const { describe, it, before, after } = require('node:test');
 const assert = require('node:assert/strict');
 const http = require('node:http');
 const app = require('../../src/app');
+const metricsStore = require('../../src/data/metrics');
+const alertsStore = require('../../src/data/alerts');
 
 function request(server, method, path, body = null) {
   return new Promise((resolve, reject) => {
@@ -45,6 +47,8 @@ describe('Dashboard Workflow Scenarios', () => {
   });
 
   after(() => {
+    metricsStore.stopSimulation();
+    alertsStore.stopEvaluation();
     return new Promise((resolve) => {
       server.close(resolve);
     });
